@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const config = require("config")
 const mongoose = require("mongoose");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -13,7 +14,13 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const User = require("./models/user");
 
-const MONGODBURI = "mongodb://localhost/shop";
+// const MONGODBURI = "mongodb://localhost/shop";
+const MONGODBURI = "mongodb://alfur:alfur123@ds241278.mlab.com:41278/shop"
+
+if (!config.get("emailApiKey")) {
+  console.log("FATAL ERROR: Email API Key is not defined");
+  process.exit(1);
+}
 
 const store = new mongoDBStore({
   uri: MONGODBURI,
@@ -54,6 +61,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+  // console.log("isloggedIn", req.session.isLoggedIn)
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();

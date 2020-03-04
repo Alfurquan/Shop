@@ -70,14 +70,21 @@ exports.postSignup = async (req, res, next) => {
     email: email,
     cart: { items: [] }
   });
-  await newUser.save();
-  res.redirect("/login");
-  await transporter.sendMail({
-    to: email,
-    from: "shop@node.com",
-    subject: "Sign up success!",
-    html: "<h1>You successfully signed up!</h1>"
-  });
+  try {
+    await newUser.save();
+    res.redirect("/login");
+    await transporter.sendMail({
+      to: email,
+      from: "shop@node.com",
+      subject: "Sign up success!",
+      html: "<h1>You successfully signed up!</h1>"
+    });
+  } catch (err) {
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  }
+
 };
 
 exports.postLogin = async (req, res, next) => {
@@ -94,20 +101,25 @@ exports.postLogin = async (req, res, next) => {
       validationErrors: errors.array()
     });
   }
-
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    req.flash("error", "Invalid email or password!");
-    return res.redirect("/login");
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      req.flash("error", "Invalid email or password!");
+      return res.redirect("/login");
+    }
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      req.flash("error", "Invalid email or password!");
+      return res.redirect("/login");
+    }
+    req.session.isLoggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
+  } catch (err) {
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
   }
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) {
-    req.flash("error", "Invalid email or password!");
-    return res.redirect("/login");
-  }
-  req.session.isLoggedIn = true;
-  req.session.user = user;
-  return res.redirect("/");
 };
 
 exports.postLogout = (req, res, next) => {

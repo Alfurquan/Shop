@@ -20,7 +20,7 @@ exports.getProducts = (req, res, next) => {
       res.render("shop/index", {
         prods: products,
         docTitle: "All Products",
-        path: "/",
+        path: "/products",
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
         hasPreviousPage: page > 1,

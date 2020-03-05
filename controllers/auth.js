@@ -92,6 +92,7 @@ exports.postLogin = async (req, res, next) => {
   const password = req.body.password;
 
   const errors = validationResult(req);
+  console.log("errs", errors.array())
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',

@@ -6,35 +6,74 @@
 <body>
     <%- include("../includes/topbar.ejs") %>
     <%- include("../includes/navigation.ejs") %>
-    <main>
-        <% if(errorMessage) { %>
-        <div class="user-message user-message--error">
-            <%= errorMessage %>
+    <main style="padding-top: 1rem;">
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>Sign Up</h2>
+                </div>
+                <div class="form">
+                    <form class="login-form" action="/signup" method="POST" novalidate>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input
+                                class="form-control"
+                                type="text" name="name" id="name" value="<%= oldInput.name %>">
+                            <% if(validationErrors.find(e=>e.param == 'name')) { %>
+                            <p class="text-danger">
+                                <%= validationErrors.find(e=>e.param == 'name').msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input
+                                class="form-control"
+                                type="email" name="email" id="email" value="<%= oldInput.email %>">
+                            <% if(validationErrors.find(e=>e.param == 'email')) { %>
+                            <p class="text-danger">
+                                <%= validationErrors.find(e=>e.param == 'email').msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input
+                                class="form-control"
+                                type="password" name="password" id="password" value="<%= oldInput.password %>">
+                            <% if(validationErrors.find(e=>e.param == 'password')) { %>
+                            <p class="text-danger">
+                                <%= validationErrors.find(e=>e.param == 'password').msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input
+                                class="form-control"
+                                type="password" name="confirmPassword" id="confirmPassword" value="<%= oldInput.password %>">
+                            <% if(validationErrors.find(e=>e.param == 'confirmPassword')) { %>
+                            <p class="text-danger">
+                                <%= validationErrors.find(e=>e.param == 'confirmPassword').msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button class="btn btn-block" type="submit">Sign up</button>
+                        <div class="message-btn text-center">
+                            <p class="text-muted">Already have an account?
+                                <a href="/login">Log In</a>
+                            </p>
+                        </div>
+                    </form>      
+                </div>
+            </div>
         </div>
-        <% } %>
-        <form class="login-form" action="/signup" method="POST" novalidate>
-            <div class="form-control">
-                <label for="name">Name</label>
-                <input class="<%= validationErrors.find(e=>e.param== 'name') ? 'invalid' : '' %>" type="text"
-                    name="name" id="name" value="<%= oldInput.name %>">
+    </div>
             </div>
-            <div class="form-control">
-                <label for="email">Email</label>
-                <input class="<%= validationErrors.find(e=>e.param== 'email') ? 'invalid' : '' %>" type="email"
-                    name="email" id="email" value="<%= oldInput.email %>">
-            </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input class="<%= validationErrors.find(e=>e.param== 'password') ? 'invalid' : '' %>" type="password"
-                    name="password" id="password" value="<%= oldInput.password %>">
-            </div>
-            <div class="form-control">
-                <label for="confirmPassword">Confirm Password</label>
-                <input class="<%= validationErrors.find(e=>e.param== 'confirmPassword') ? 'invalid' : '' %>"
-                    type="password" name="confirmPassword" id="confirmPassword" value="<%= oldInput.confirmPassword %>">
-            </div>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <button class="btn" type="submit">Sign up</button>
-        </form>
+        </section>
     </main>
     <%- include("../includes/end.ejs") %>

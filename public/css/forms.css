@@ -1,35 +1,82 @@
-
-.card{
-    width:fit-content;
-    margin: auto;
-    box-shadow: none;
+.card {
+  width: 100%;
+  margin: auto;
+  box-shadow: none;
 }
 
-.form{
-    padding: 1rem;
+.form {
+  padding: 1rem 1rem 1rem 1rem;
 }
 
-form button{
-    color: #fff !important;
-    background-color:  #88c8bc !important;
+form button {
+  color: #fff !important;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
-form button:hover{
-    background-color: #67a39a !important;
+form .form-control {
+  border-radius: 0;
+  background-color: #f0f0f0;
+  border: 0;
+  height: 44px;
+  line-height: 44px;
+  box-shadow: none;
 }
 
-.header{
-    padding: 1rem;
-    color: black;
-    font-weight: bold;
-    text-align: center;
-}
-.centered a{
-    text-decoration: none;
-    color: #88c8bc;
+form .help-text {
+  color: #252525;
+  font-size: 13px;
+  line-height: 22px;
+  margin: 0 0 20px;
 }
 
-.centered a:hover,
-.centered a.active{
-    color: #67a39a;
+form input.form-control,
+textarea.form-control,
+select.form-control {
+  font-size: 14px;
+  padding: 13px 20px;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+form .form-control:focus {
+  border-color: none;
+  box-shadow: none;
+  background-color: #f0f0f0;
+}
+
+form label {
+  color: #252525;
+}
+
+form .message-btn {
+  padding-top: 10px;
+}
+
+form .message-btn a {
+  text-decoration: none;
+  color: rgb(71, 186, 193);
+}
+
+form .message-btn a:hover {
+  color: #67a39a;
+  text-decoration: none;
+}
+
+.header {
+  background-color: #47bac1;
+  border-radius: 0;
+  padding: 0 15px;
+  height: 60px;
+  text-align: center;
+}
+
+.header h2 {
+  font-size: 35px;
+  text-align: center;
+  text-transform: capitalize;
+  margin-bottom: 0;
+  font-weight: 400;
+  color: #fff;
+  line-height: 60px;
 }

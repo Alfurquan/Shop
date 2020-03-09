@@ -7,34 +7,117 @@
     <%- include("../includes/navigation.ejs") %>
 
     <main>
-        <% if(prods.length > 0) { %>
-        <div class="grid">
-            <% for(let product of prods) { %>
-            <article class="card product-item">
-                <header class="card__header">
-                    <h1 class="product__title"><%= product.title %></h1>
-                </header>
-                <div class="card__image">
-                    <img src="/<%= product.imageUrl %>" alt="<%= product.title %>">
+        <section id="showcase-inner" class="py-5 text-light bg-light">
+            <div class="container">
+              <div class="row text-center">
+                <div class="col-md-12">
+                  <h1 class="heading">Our Collection</h1>
+                  <p class="lead">Browse our wide range of products</p>
                 </div>
-                <div class="card__content">
-                    <h2 class="product__price">Rs <%= product.price %></h2>
-                    <p class="product__description"><%= product.description %>
-                    </p>
-                </div>
-                <div class="card__actions">
-                    <a href="/products/<%= product._id %>/" class="btn">Details</a>
-                    <% if (isAuthenticated){ %>
-                    <%- include("../includes/add-to-cart" , {product:product}) %>
-                    <% } %>
-                    </form>
-                </div>
-            </article>
-            <% } %>
-        </div>
-        <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
-        <% } else{ %>
-        <h1>No products found!</h1>
-        <% } %>
+              </div>
+            </div>
+          </section>
+
+          <section id="products" class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 sidebar">
+                        <div class="card categories">
+                            <div class="panel-heading">
+                                Product Categories
+                            </div>
+                            <div class="panel-body">
+                                <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
+                                    <ul class="nav navbar-nav side-nav">
+                                        <li>
+                                            <a 
+                                            href="<%= (selectedCategory && selectedSortOrder) ? url.replace('category=' + selectedCategory,'').replace('&','') :
+                                                       (selectedCategory) ? url.replace('category=' + selectedCategory,'').replace('?','')
+                                                       : url %>" 
+                                            class="<%= (selectedCategory === '') ? 'active' : ''%>">
+                                            All Categories
+                                        </a>
+                                        </li>
+                                        <% for(let category of categories) { %>
+                                            <li>
+                                                <a 
+                                                href="<%= (queryAdded) ? '?category=' + category.title : 
+                                                      (selectedCategory) ? url.replace(selectedCategory,category.title) : 
+                                                      url + '&category='+category.title  %>"
+                                                class="<%= (selectedCategory && (selectedCategory === category.title)) ? 'active' : ''%>">
+                                                <%= category.title %>
+                                            </a>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-8 content__area">
+                        <div class="row filter-row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="dropdown__heading">
+                                    <p>Select Sort order <i class="fa fa-chevron-down"></i></p>
+                                </div>
+                                <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse" id="sort-menu">
+                                    <ul class="nav navbar-nav side-nav">
+                                     <li>
+                                         <a href="<%= (selectedSortOrder && selectedCategory) ? url.replace('sortBy=' + selectedSortOrder,'').replace('&','') : 
+                                                       (selectedSortOrder) ? url.replace('sortBy=' + selectedSortOrder,'').replace('?','') :
+                                                        url %>">Default sorting</a>
+                                    </li>
+                                     <li>
+                                         <a href="<%= (queryAdded) ? '?sortBy=price' : 
+                                         (selectedSortOrder) ? url.replace(selectedSortOrder,'price')  : 
+                                         url + '&sortBy=price'%>">Sort by price</a>
+                                    </li>
+                                    <li>
+                                        <a href="<%= (queryAdded) ? '?sortBy=name' : 
+                                        (selectedSortOrder) ? url.replace(selectedSortOrder,'name')  : 
+                                        url + '&sortBy=name'%>">Sort by name</a>
+                                    </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <% if(prods.length > 0) { %>
+                                <% for(let product of prods) { %>
+                            <div class="col-md-4 col-lg-4 mb-4">
+                                <div class="card product__image__container">
+                                    <img class="product__image" src="<%= product.imageUrl %>" alt="">
+                                    <div class="product__masking">
+                                        <form id="form" action="/cart" method="POST">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                            <input type="hidden" name="productId" value="<%= product.id %>" />
+                                          </form>
+                                        <ul class="list-inline btn-group" role="group">
+                                            <li>
+                                                <a href="/products/<%=product._id %>"><i class="fa fa-eye"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:{document.getElementById('form').submit()}"><i class="fa fa-shopping-cart"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product__caption">
+                                    <h5><%= product.title %></h5>
+                                    <h6 class="text-muted">Rs <%= product.price %></h6>
+                                </div>
+                            </div>
+                            <% } %>
+                            <% } else{ %>
+                                <div class="col-md-12">
+                                    <h1>No products found!</h1>
+                                </div>
+                            <% } %>
+                        </div>
+                        </div>
+                    </div>                   
+                <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+            </div>
+         </section>       
     </main>
     <%- include("../includes/end.ejs") %>

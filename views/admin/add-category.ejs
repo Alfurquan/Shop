@@ -1,0 +1,44 @@
+<%- include("../includes/head.ejs") %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include("../includes/topbar.ejs") %>
+    <%- include("../includes/navigation.ejs") %>
+    <main style="padding-top: 1rem;">
+        <%- include("../includes/message.ejs") %>
+        <section class="py-5">
+            <div class="card">
+                <div class="header">
+                    <h2>Add Category</h2>
+                </div>
+                <div class="form">
+                    <form class="product-form" action="/admin/add-category"
+                        method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input class="form-control" type="text" 
+                                value="<% if(hasError) { %><%= category.title %><% } %>"
+                                name="title" id="title">
+                            <% if(validationErrors.find(e=>e.param == 'title')) { %>
+                                <p class="text-danger">
+                                    <%= validationErrors.find(e=>e.param == 'title').msg %>
+                                </p>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file"name="image" id="image">
+                        </div>
+                        
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            
+                        <button class="btn btn-block" type="submit">Add Category</button>
+                    </form>
+                </div>
+                </div>
+        </section>
+       
+    </main>
+    <%- include("../includes/end.ejs") %>

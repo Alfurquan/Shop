@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
-
+/* @import url("https://fonts.googleapis.com/css?family=Oxygen&display=swap"); */
 * {
   box-sizing: border-box;
 }
@@ -7,7 +6,7 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Oxygen", sans-serif !important;
 }
 
 main {
@@ -32,176 +31,70 @@ form {
 }
 
 .social a {
-  margin-right: 0.4rem; 
+  margin-right: 0.4rem;
+}
+.nav-links {
+  transition: color 0.2s;
 }
 
-nav{
+nav {
+  background-color: white;
+  color: #252525;
   /* -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black; */
- box-shadow:  0 1px 8px -6px rgba(0, 0,0,0.4)
+  box-shadow: 0 3px 12px -6px rgba(0, 0, 0, 0.4);
 }
 
-.navbar-light .navbar-nav .show > .nav-link, 
-.navbar-light .navbar-nav .active > .nav-link, 
-.navbar-light .navbar-nav .nav-link.show, 
-.navbar-light .navbar-nav .nav-link.active{
-  color : #88c8bc !important
+.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .active > .nav-link,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .nav-link.active {
+  color: #88c8bc !important;
 }
 
-navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:hover {
-  color:  #88c8bc !important
+navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #88c8bc !important;
 }
 
-.nav-item button{
+.nav-item button {
   font: inherit;
   background: transparent;
   border: none;
   text-decoration: none;
-  color: rgba(0,0,0, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
 }
 
-.nav-item button:hover{
-  color:  #88c8bc !important
-
+.nav-item button:hover {
+  color: #88c8bc !important;
 }
 
-.main-header {
-  width: 100%;
-  height: 3.5rem;
-  background-color: #00695c;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
+main {
+  padding: 0px;
 }
 
-.main-header__nav {
-  height: 100%;
-  width: 100%;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
+#showcase-inner {
+  padding-top: 5rem !important;
+  background: url(../images/shopping.jpeg) no-repeat top center fixed;
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
 }
-
-.main-header__item-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.main-header__item {
-  margin: 0 1rem;
-  padding: 0;
-}
-
-.main-header__item a,
-.main-header__item button {
-  font: inherit;
-  background: transparent;
-  border: none;
-  text-decoration: none;
-  color: white;
-  cursor: pointer;
-}
-
-.main-header__item a:hover,
-.main-header__item a:active,
-.main-header__item a.active,
-.main-header__item button:hover,
-.main-header__item button:active {
-  color: #ffeb3b;
-}
-
-.mobile-nav {
-  width: 30rem;
-  height: 100vh;
-  max-width: 90%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background: white;
-  z-index: 10;
-  padding: 2rem 1rem 1rem 2rem;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-out;
-}
-
-.mobile-nav.open {
-  transform: translateX(0);
-}
-
-.mobile-nav__item-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-}
-
-.mobile-nav__item {
-  margin: 1rem;
-  padding: 0;
-}
-
-.mobile-nav__item a,
-.mobile-nav__item button {
-  font: inherit;
-  text-decoration: none;
-  color: black;
-  font-size: 1.5rem;
-  padding: 0.5rem 2rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.mobile-nav__item a:active,
-.mobile-nav__item a:hover,
-.mobile-nav__item a.active,
-.mobile-nav__item button:hover,
-.mobile-nav__item button:active {
-  background: #00695c;
-  color: white;
-  border-radius: 3px;
-}
-
-#side-menu-toggle {
-  border: 1px solid white;
-  font: inherit;
-  padding: 0.5rem;
-  display: block;
-  background: transparent;
-  color: white;
-  cursor: pointer;
-}
-
-#side-menu-toggle:focus {
-  outline: none;
-}
-
-#side-menu-toggle:active,
-#side-menu-toggle:hover {
-  color: #ffeb3b;
-  border-color: #ffeb3b;
-}
-
-.backdrop {
-  position: fixed;
+#showcase-inner::before {
+  content: "";
+  position: absolute;
   top: 0;
   left: 0;
+  min-height: 100%;
   width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 5;
-  display: none;
+  background: rgba(71, 186, 193, 0.8) !important;
 }
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: stretch;
+/* Text CSS */
+
+.heading {
+  font-size: 2rem;
 }
 
 .card {
@@ -243,16 +136,16 @@ navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:ho
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #00695c;
-  color: #00695c;
+  background-color: rgba(71, 186, 193, 0.9) !important;
   background: white;
   border-radius: 3px;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #00695c;
+  background-color: rgba(71, 186, 193, 0.7) !important ;
   color: white;
 }
 
@@ -267,28 +160,18 @@ navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:ho
   color: white;
 }
 
-.user-message {
+.alert-message {
   margin: auto;
-  width: 90%;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 3px;
-  background-color: #ccc;
+  width: 40%;
   text-align: center;
 }
 
-.user-message--error {
-  border-color: red;
-  background-color: rgb(255, 176, 176);
-  color: red;
-}
-
-.pagination{
+.pagination {
   margin-top: 2rem;
   text-align: center;
 }
 
-.pagination a{
+.pagination a {
   text-decoration: none;
   color: #00695c;
   padding: 0.5rem;
@@ -298,18 +181,14 @@ navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:ho
 
 .pagination a:hover,
 .pagination a:active,
-.pagination a.active{
+.pagination a.active {
   background-color: #00695c;
   color: white;
 }
 
 @media (min-width: 768px) {
-  .main-header__nav {
-    display: flex;
-  }
-
-  #side-menu-toggle {
-    display: none;
+  .heading {
+    font-size: 3rem;
   }
   .user-message {
     width: 30rem;

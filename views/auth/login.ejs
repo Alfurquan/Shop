@@ -6,14 +6,18 @@
 <body>
     <%- include("../includes/topbar.ejs") %>
     <%- include("../includes/navigation.ejs") %>
-    <main>
+    <main style="padding-top: 1rem;">
+        <%- include("../includes/message.ejs") %>
         <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
             <div class="card">
                 <div class="header">
                     <h2>Login</h2>
                 </div>
                 <div class="form">
-                    <form class="login-form" action="/login" method="POST">
+                    <form class="login-form" action="/login" method="POST" novalidate>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input
@@ -37,13 +41,16 @@
                             <% } %>
                         </div>
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                        <button class="btn btn-block" type="submit">Login</button>
+                        <button class="btn btn-block form-btn" type="submit">Log in</button>
+                        <div class="message-btn text-center">
+                            <a href="/reset">Forgot Password?</a>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="centered">
-                <a href="/reset">Forgot Password?</a>
-            </div>
-        </section>
-    </main>
+        </div>
+        </div>
+    </div>          
+</section>
+</main>
     <%- include("../includes/end.ejs") %>

@@ -4,20 +4,36 @@
 </head>
 
 <body>
+    <%- include("../includes/topbar.ejs") %>
     <%- include("../includes/navigation.ejs") %>
-    <main>
-        <% if(errorMessage) { %>
-        <div class="user-message user-message--error">
-            <%= errorMessage %>
+    <main style="padding-top: 1rem;">
+       <%- include("../includes/message.ejs") %>
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>Lost Password</h2>
+                </div>
+                <div class="form">
+                    <form class="login-form" action="/reset" method="POST">
+                        <p class="help-text">
+                            Enter the e-mail address associated with your account. Click submit to have your password e-mailed to you.
+                        </p>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input
+                                class="form-control"
+                                type="email" name="email" id="email">
+                        </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button class="btn btn-block" type="submit">Submit</button>
+                    </form>
+                </div>              
+            </div> 
         </div>
-        <% } %>
-        <form class="login-form" action="/reset" method="POST">
-            <div class="form-control">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email">
-            </div>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <button class="btn" type="submit">Reset password</button>
-        </form>
-    </main>
+    </div>
+    </section>          
+</main>
     <%- include("../includes/end.ejs") %>

@@ -1,16 +1,10 @@
-const backdrop = document.querySelector(".backdrop");
-const sideDrawer = document.querySelector(".mobile-nav");
-const menuToggle = document.querySelector("#side-menu-toggle");
-
-function backdropClickHandler() {
-  backdrop.style.display = "none";
-  sideDrawer.classList.remove("open");
-}
-
-function menuToggleClickHandler() {
-  backdrop.style.display = "block";
-  sideDrawer.classList.add("open");
-}
-
-backdrop.addEventListener("click", backdropClickHandler);
-menuToggle.addEventListener("click", menuToggleClickHandler);
+$(document).ready(function() {
+  $(".alert")
+    .fadeTo(2000, 500)
+    .slideUp(500, function() {
+      $(".alert").slideUp(500);
+    });
+  $(".dropdown__heading").click(function() {
+    $("#sort-menu").slideToggle();
+  });
+});

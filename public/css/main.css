@@ -166,11 +166,29 @@ main {
   text-align: center;
 }
 
-.page-item.active .page-link 
-{
+.page-item.active .page-link {
   border-color: rgb(71, 186, 193) !important;
   background-color: rgb(71, 186, 193) !important;
   color: white;
+}
+
+/* FOOTER SECTION CSS */
+
+.light-section {
+  background-color: #f0f0f0;
+  height: 125px;
+}
+
+.partners__logo {
+  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center !important;
+}
+
+.partnersLogoSlider .slide {
+  display: table !important;
+  height: 125px !important;
 }
 
 @media (min-width: 768px) {
@@ -179,5 +197,8 @@ main {
   }
   .user-message {
     width: 30rem;
+  }
+  .partners__logo {
+    width: 270px;
   }
 }

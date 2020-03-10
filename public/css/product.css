@@ -133,5 +133,35 @@
   padding: 5px 5px;
   height: 35px;
   width: 180px;
+  cursor: pointer;
   font-size: 16px;
+}
+#bc nav{
+  box-shadow: none;
+}
+#sort-menu{
+  width: 180px;
+  border:0.4px solid rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+}
+
+.dropdown__heading .fa{
+  float: right;
+  padding-top: 3px;
+  color: #808080;
+}
+
+#sort-menu ul li a{
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+#sort-menu ul li a:hover,
+#sort-menu ul li a.active,
+#sort-menu ul li a:active{
+  color: rgb(71, 186, 193);
+}
+
+.page-row{
+  padding-top: 3rem;
 }

@@ -6,7 +6,7 @@ const path = require("path");
 const _ = require("lodash");
 const PDFDocument = require("pdfkit");
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 6;
 
 exports.getProducts = async (req, res, next) => {
   const categories = await Category.find().select("title");
@@ -15,10 +15,15 @@ exports.getProducts = async (req, res, next) => {
   let totalItems;
   let products;
   let selectedCategory;
-  console.log("query", req.originalUrl);
-  console.log("qq", _.isEmpty(req.query));
-  console.log("sortOrder", sortOrder);
+  // console.log("query", req.originalUrl);
+  // console.log("qq", _.isEmpty(req.query));
+  // console.log("sortOrder", sortOrder);
+  // console.log("ispage", !req.query.page)
   let category = req.query.category || "";
+  // console.log("selectedCategory", category)
+  // console.log("selectedPage", page)
+  // console.log("nextPage", page + 1)
+  // console.log("prevPage", page - 1)
   // console.log(category);
   // If category is selected filter by selected category
   if (category) {
@@ -27,7 +32,16 @@ exports.getProducts = async (req, res, next) => {
   }
 
   try {
-    if (selectedCategory) {
+    if (selectedCategory && sortOrder) {
+      totalItems = await Product.find({
+        category: selectedCategory
+      }).countDocuments();
+
+      products = await Product.find({ category: selectedCategory })
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE).sort({ [sortOrder]: 1 });
+    }
+    else if (selectedCategory) {
       totalItems = await Product.find({
         category: selectedCategory
       }).countDocuments();
@@ -35,7 +49,16 @@ exports.getProducts = async (req, res, next) => {
       products = await Product.find({ category: selectedCategory })
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE);
-    } else {
+    }
+    else if (sortOrder) {
+      totalItems = await Product.find().countDocuments();
+
+      products = await Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE).sort({ [sortOrder]: 1 })
+
+    }
+    else {
       totalItems = await Product.find().countDocuments();
 
       products = await Product.find()
@@ -43,6 +66,7 @@ exports.getProducts = async (req, res, next) => {
         .limit(ITEMS_PER_PAGE);
     }
 
+    console.log("cond", (category !== '' || sortOrder !== undefined))
     res.render("shop/product-list", {
       prods: products,
       docTitle: "All Products",
@@ -52,6 +76,7 @@ exports.getProducts = async (req, res, next) => {
       url: req.originalUrl,
       queryAdded: _.isEmpty(req.query),
       selectedSortOrder: sortOrder,
+      isPageSelected: !req.query.page,
       hasNextPage: ITEMS_PER_PAGE * page < totalItems,
       hasPreviousPage: page > 1,
       nextPage: page + 1,
@@ -251,11 +276,11 @@ exports.getInvoice = (req, res, next) => {
           .fontSize(14)
           .text(
             prod.product.title +
-              " - " +
-              prod.quantity +
-              " X " +
-              " RS " +
-              prod.product.price
+            " - " +
+            prod.quantity +
+            " X " +
+            " RS " +
+            prod.product.price
           );
       });
       pdfDoc.text("------------------------------");

@@ -1,15 +1,36 @@
-<section class="pagination">
-    <% if (currentPage !== 1 && previousPage !== 1) { %>
-    <a href="?page=1">1</a>
-    <% } %>
-    <% if (hasPreviousPage) { %>
-    <a href="?page=<%= previousPage %>"><%= previousPage %></a>
-    <% } %>
-    <a href="?page=<%= currentPage %>" class="active"><%= currentPage %></a>
-    <% if (hasNextPage) { %>
-    <a href="?page=<%= nextPage %>"><%= nextPage %></a>
-    <% } %>
-    <% if (lastPage !== currentPage && nextPage !== lastPage) { %>
-    <a href="?page=<%= lastPage %>"><%= lastPage %></a>
-    <% } %>
-</section>
+<div class="text-xs-center">
+    <ul class="pagination justify-content-center">
+        <% if (currentPage !== 1 && previousPage !== 1) { %>
+        <li class="page-item">
+            <a class="page-link" href="<%= (pageSelected && (selectedCategory !== '' || sortOrder !== undefined)) ? url + '&page=1' :
+            (pageSelected !== 1) ? url.replace(currentPage, 1) : '?page=1' %>">1</a>
+        </li>
+        <% } %>
+        <% if (hasPreviousPage) { %>
+        <li class="page-item">
+            <a class="page-link"
+                href="<%= (pageSelected && (selectedCategory !== '' || sortOrder !== undefined)) ? url + '&page=' + previousPage :
+                    (currentPage !== previousPage) ? url.replace(currentPage, previousPage) : '?page=' + previousPage %>"><%= previousPage %></a>
+        </li>
+        <% } %>
+        <li class="page-item active">
+            <a class="page-link"
+                href="<%= (pageSelected && (selectedCategory !== '' || sortOrder !== undefined)) ? url + '&page=' + currentPage : 
+            (selectedCategory !== '' || sortOrder !== undefined) ? url :'?page=' + currentPage %>"><%= currentPage %></a>
+        </li>
+        <% if (hasNextPage) { %>
+        <li class="page-item">
+            <a class="page-link" href="<%= (pageSelected && (selectedCategory!== '' || sortOrder !== undefined)) ? url + '&page=' + nextPage : 
+            (!pageSelected && currentPage !== nextPage) ? url.replace(currentPage, nextPage) :
+           '?page=' + nextPage %>"><%= nextPage %></a>
+        </li>
+        <% } %>
+        <% if (lastPage !== currentPage && nextPage !== lastPage) { %>
+        <li class="page-item">
+            <a class="page-link" href="<%= (pageSelected && (selectedCategory !== '' || sortOrder !== undefined)) ? url +  '&page=' + lastPage : 
+            (!pageSelected && currentPage !== lastPage) ? url.replace(currentPage, lastPage) :
+            '?page=' + lastPage %>"><%= lastPage %></a>
+        </li>
+        <% } %>
+    </ul>
+</div>

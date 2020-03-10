@@ -9,16 +9,30 @@
     <main>
         <section id="showcase-inner" class="py-5 text-light bg-light">
             <div class="container">
-              <div class="row text-center">
-                <div class="col-md-12">
-                  <h1 class="heading">Our Collection</h1>
-                  <p class="lead">Browse our wide range of products</p>
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <h1 class="heading">Our Collection</h1>
+                        <p class="lead">Browse our wide range of products</p>
+                    </div>
                 </div>
-              </div>
             </div>
-          </section>
+        </section>
 
-          <section id="products" class="py-4">
+        <section id="bc" class="mt-3">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">
+                                <i class="fa fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active"> Products</li>
+                    </ol>
+                </nav>
+            </div>
+        </section>
+
+        <section id="products" class="py-4">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 col-md-4 sidebar">
@@ -30,24 +44,24 @@
                                 <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
                                     <ul class="nav navbar-nav side-nav">
                                         <li>
-                                            <a 
-                                            href="<%= (selectedCategory && selectedSortOrder) ? url.replace('category=' + selectedCategory,'').replace('&','') :
-                                                       (selectedCategory) ? url.replace('category=' + selectedCategory,'').replace('?','')
-                                                       : url %>" 
-                                            class="<%= (selectedCategory === '') ? 'active' : ''%>">
-                                            All Categories
-                                        </a>
+                                            <a href="<%= (selectedCategory && selectedSortOrder) ? url.replace('category=' + selectedCategory,'').replace('&','') :
+                                                       (selectedCategory) ? (!isPageSelected) ? url.replace('category=' + selectedCategory,'').replace('?','').replace('&page='+currentPage,'') : 
+                                                       url.replace('category=' + selectedCategory,'').replace('?','')
+                                                        : url %>"
+                                                class="<%= (selectedCategory === '') ? 'active' : ''%>">
+                                                All Categories
+                                            </a>
                                         </li>
                                         <% for(let category of categories) { %>
-                                            <li>
-                                                <a 
-                                                href="<%= (queryAdded) ? '?category=' + category.title : 
+                                        <li>
+                                            <a href="<%= (!queryAdded && !isPageSelected) ? '?category=' + category.title : 
+                                                        (queryAdded) ? '?category=' + category.title :
                                                       (selectedCategory) ? url.replace(selectedCategory,category.title) : 
                                                       url + '&category='+category.title  %>"
                                                 class="<%= (selectedCategory && (selectedCategory === category.title)) ? 'active' : ''%>">
                                                 <%= category.title %>
                                             </a>
-                                            </li>
+                                        </li>
                                         <% } %>
                                     </ul>
                                 </div>
@@ -58,46 +72,55 @@
                         <div class="row filter-row">
                             <div class="col-lg-6 col-md-6">
                                 <div class="dropdown__heading">
-                                    <p>Select Sort order <i class="fa fa-chevron-down"></i></p>
+                                    <p>
+                                        <%= (selectedSortOrder) ? 'Sort by ' + selectedSortOrder : 'Default Sorting' %>
+                                        <i class="fa fa-chevron-down"></i></p>
                                 </div>
-                                <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse" id="sort-menu">
+                                <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse"
+                                    id="sort-menu">
                                     <ul class="nav navbar-nav side-nav">
-                                     <li>
-                                         <a href="<%= (selectedSortOrder && selectedCategory) ? url.replace('sortBy=' + selectedSortOrder,'').replace('&','') : 
-                                                       (selectedSortOrder) ? url.replace('sortBy=' + selectedSortOrder,'').replace('?','') :
-                                                        url %>">Default sorting</a>
-                                    </li>
-                                     <li>
-                                         <a href="<%= (queryAdded) ? '?sortBy=price' : 
-                                         (selectedSortOrder) ? url.replace(selectedSortOrder,'price')  : 
-                                         url + '&sortBy=price'%>">Sort by price</a>
-                                    </li>
-                                    <li>
-                                        <a href="<%= (queryAdded) ? '?sortBy=name' : 
-                                        (selectedSortOrder) ? url.replace(selectedSortOrder,'name')  : 
-                                        url + '&sortBy=name'%>">Sort by name</a>
-                                    </li>
+                                        <li>
+                                            <a href="<%= (selectedSortOrder && selectedCategory) ? (!isPageSelected) ?  url.replace('&sortBy=' + selectedSortOrder,'').replace('&page='+currentPage,''):
+                                                         url.replace('sortBy=' + selectedSortOrder,'').replace('&','') : 
+                                                         (selectedSortOrder) ? (!isPageSelected) ? url.replace('sortBy=' + selectedSortOrder,'').replace('&','') :
+                                                         url.replace('sortBy=' + selectedSortOrder,'').replace('?','') :
+                                                         url %>">Default sorting</a>
+                                        </li>
+                                        <li>
+                                            <a href="<%= (queryAdded && isPageSelected) ? '?sortBy=price' : 
+                                                         (selectedSortOrder) ? (!isPageSelected) ? url.replace('&page='+currentPage,'') :
+                                                         url.replace(selectedSortOrder,'price')  : 
+                                                         (!isPageSelected) ? url.replace('&page='+currentPage,'').concat('&sortBy=price') :
+                                                         url + '&sortBy=price'%>">
+                                                Sort by price
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<%= (queryAdded && isPageSelected) ? '?sortBy=title' : 
+                                                    (selectedSortOrder) ? (!isPageSelected) ? url.replace('&page='+currentPage,'') :
+                                                    url.replace(selectedSortOrder,'title')  : 
+                                                    (!isPageSelected) ? url.replace('&page='+currentPage,'').concat('&sortBy=title') :
+                                                    url + '&sortBy=title'%>">Sort by title</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <% if(prods.length > 0) { %>
-                                <% for(let product of prods) { %>
+                            <% for(let product of prods) { %>
                             <div class="col-md-4 col-lg-4 mb-4">
                                 <div class="card product__image__container">
                                     <img class="product__image" src="<%= product.imageUrl %>" alt="">
                                     <div class="product__masking">
-                                        <form id="form" action="/cart" method="POST">
-                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                                            <input type="hidden" name="productId" value="<%= product.id %>" />
-                                          </form>
+                                        <%- include('../includes/add-to-cart.ejs',{product:product}) %>
                                         <ul class="list-inline btn-group" role="group">
                                             <li>
                                                 <a href="/products/<%=product._id %>"><i class="fa fa-eye"></i></a>
                                             </li>
                                             <li>
-                                                <a href="javascript:{document.getElementById('form').submit()}"><i class="fa fa-shopping-cart"></i></a>
+                                                <a href="javascript:{document.getElementById('form').submit()}"><i
+                                                        class="fa fa-shopping-cart"></i></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -109,15 +132,19 @@
                             </div>
                             <% } %>
                             <% } else{ %>
-                                <div class="col-md-12">
-                                    <h1>No products found!</h1>
-                                </div>
+                            <div class="col-md-12">
+                                <h1>No products found!</h1>
+                            </div>
                             <% } %>
                         </div>
-                        </div>
-                    </div>                   
-                <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+                    </div>
+                </div>
+                <div class="row page-row">
+                    <div class="col-md-12">
+                        <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage,sortOrder:selectedSortOrder,selectedCategory:selectedCategory,url:url,pageSelected:isPageSelected}) %>
+                    </div>
+                </div>
             </div>
-         </section>       
+        </section>
     </main>
     <%- include("../includes/end.ejs") %>

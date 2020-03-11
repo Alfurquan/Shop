@@ -16,3 +16,13 @@ exports.get500 = (req, res, next) => {
       isAuthenticated: req.session.isLoggedIn
     });
 };
+exports.get403 = (req, res, next) => {
+  res
+    .status(403)
+    .render("403", {
+      docTitle: "Error",
+      path: "/403",
+      isAuthenticated: req.session.isLoggedIn
+    });
+};
+

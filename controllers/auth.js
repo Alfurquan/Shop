@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport(
 );
 
 exports.getLogin = (req, res, next) => {
+  console.log("token", req.csrfToken())
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -93,7 +94,7 @@ exports.postSignup = async (req, res, next) => {
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log("body", req.body)
   const errors = validationResult(req);
   console.log("errs", errors.array());
   if (!errors.isEmpty()) {

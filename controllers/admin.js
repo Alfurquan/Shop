@@ -5,7 +5,8 @@ const fileHelper = require("../util/file");
 
 exports.getAddProduct = async (req, res, next) => {
   const categories = await Category.find().select("title");
-  console.log("cate", categories);
+  // console.log("cate", categories);
+  console.log("token", req.csrfToken())
 
   res.render("admin/edit-product", {
     docTitle: "Add Product",

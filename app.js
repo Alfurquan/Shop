@@ -9,7 +9,7 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 const errorController = require("./controllers/error");
 const session = require("express-session");
-const multer = require("multer");
+// const multer = require("multer");
 const mongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
@@ -28,41 +28,40 @@ const store = new mongoDBStore({
   collections: "sessions"
 });
 
-const csrfProtection = csrf();
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
-  }
-});
+// const fileStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
+//   }
+// });
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype === "image/png" ||
+//     file.mimetype === "image/jpg" ||
+//     file.mimetype === "image/jpeg"
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(
-  multer({
-    storage: fileStorage,
-    fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }
-  }).single("image")
-);
+// app.use(
+//   multer({
+//     storage: fileStorage,
+//     fileFilter: fileFilter,
+//     limits: { fileSize: 5 * 1024 * 1024 }
+//   }).single("image")
+// );
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(
@@ -74,7 +73,8 @@ app.use(
   })
 );
 
-app.use(csrfProtection);
+
+app.use(csrf());
 app.use(flash());
 
 app.use((req, res, next) => {
@@ -107,6 +107,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.get("/500", errorController.get500);
+app.use("/403", errorController.get403)
 app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
@@ -126,6 +127,7 @@ mongoose
   //   })
   .then(() => {
     console.log("Connected to mongoDB");
+    // require("./util/seed")
   })
   .catch(err => {
     console.log("could not connect to mongoDB", err);

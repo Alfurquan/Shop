@@ -9,7 +9,7 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 const errorController = require("./controllers/error");
 const session = require("express-session");
-// const multer = require("multer");
+const multer = require("multer");
 const mongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
@@ -112,6 +112,9 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
   console.log("500err", error);
+  if (error instanceof multer.MulterError) {
+    res.redirect("/admin/add-product")
+  }
   res.redirect("/500");
 });
 

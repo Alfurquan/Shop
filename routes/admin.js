@@ -15,7 +15,15 @@ router.post(
   "/add-product",
   auth,
   isAdmin,
-  upload.single("image"),
+  upload.fields([
+    {
+      name: "image",
+      maxCount: 1
+    }, {
+      name: "images",
+      maxCount: 3
+    }
+  ]),
   [
     body("title", "Enter a valid title")
       .isLength({ min: 4 })

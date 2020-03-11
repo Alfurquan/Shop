@@ -14,10 +14,15 @@ const productSchema = new Schema({
     type: String,
     required: true
   },
-  imageUrl: {
+  mainImageUrl: {
     type: String,
     required: true
   },
+  otherImages: [
+    {
+      type: String
+    }
+  ],
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",

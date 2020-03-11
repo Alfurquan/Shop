@@ -1,7 +1,9 @@
 const Product = require("../models/product");
 const Category = require("../models/category");
 const { validationResult } = require("express-validator");
+const _ = require("lodash");
 const fileHelper = require("../util/file");
+
 
 exports.getAddProduct = async (req, res, next) => {
   const categories = await Category.find().select("title");
@@ -22,11 +24,14 @@ exports.getAddProduct = async (req, res, next) => {
 exports.postAddProduct = async (req, res, next) => {
   const categories = await Category.find().select("title");
   const title = req.body.title;
-  const image = req.file;
+  const image = req.files.image[0];
+  const images = req.files.images;
   const price = req.body.price;
   const description = req.body.description;
   const category = req.body.category;
   console.log("res", req.body);
+  console.log("file", req.files.image[0].path)
+
   if (!image) {
     return res.status(422).render("admin/edit-product", {
       docTitle: "Add Product",
@@ -40,7 +45,7 @@ exports.postAddProduct = async (req, res, next) => {
         category: category,
         description: description
       },
-      errorMessage: "Attached file is not an image",
+      errorMessage: "Attached main image file is not an image",
       validationErrors: []
     });
   }
@@ -53,6 +58,21 @@ exports.postAddProduct = async (req, res, next) => {
       categories: categories,
       product: { title: title, price: price, description: description },
       errorMessage: "Please select a category",
+      validationErrors: []
+    });
+  }
+
+  if (images.length > 3) {
+    return res.status(422).render("admin/edit-product", {
+      docTitle: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      hasError: true,
+      categories: categories,
+      product: {
+        title: title, price: price, description: description, category: category
+      },
+      errorMessage: "You can select upto 3 images per product",
       validationErrors: []
     });
   }
@@ -77,16 +97,20 @@ exports.postAddProduct = async (req, res, next) => {
     });
   }
 
-  const imageUrl = image.path;
+  const mainImageUrl = image.path;
 
   const product = new Product({
     title: title,
-    imageUrl: imageUrl,
+    mainImageUrl: mainImageUrl,
     price: price,
     category: category,
     description: description,
     user: req.user._id
   });
+  _.forEach(images, image => {
+    product.otherImages.push(image.path)
+  })
+
   product
     .save()
     .then(result => {

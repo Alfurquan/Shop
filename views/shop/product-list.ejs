@@ -136,17 +136,17 @@
                                 </div>
                             </div>
                             <% } %>
+                            <div class="row page-row">
+                                <div class="col-md-12">
+                                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage,sortOrder:selectedSortOrder,selectedCategory:selectedCategory,url:url,pageSelected:isPageSelected}) %>
+                                </div>
+                            </div>
                             <% } else{ %>
                             <div class="col-md-12">
                                 <h1>No products found!</h1>
                             </div>
                             <% } %>
                         </div>
-                    </div>
-                </div>
-                <div class="row page-row">
-                    <div class="col-md-12">
-                        <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage,sortOrder:selectedSortOrder,selectedCategory:selectedCategory,url:url,pageSelected:isPageSelected}) %>
                     </div>
                 </div>
             </div>

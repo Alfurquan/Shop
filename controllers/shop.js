@@ -66,7 +66,7 @@ exports.getProducts = async (req, res, next) => {
         .limit(ITEMS_PER_PAGE);
     }
 
-    console.log("cond", (category !== '' || sortOrder !== undefined))
+    // console.log("cond", (category !== '' || sortOrder !== undefined))
     res.render("shop/product-list", {
       prods: products,
       docTitle: "All Products",

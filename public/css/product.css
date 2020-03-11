@@ -137,7 +137,14 @@
 }
 
 .filter-row {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+.selected__category{
+  margin-bottom: 20px;
+}
+
+.dropdown-area{
+  max-width: 25% !important;
 }
 .dropdown__heading {
   border: 0.4px solid rgba(0, 0, 0, 0.2);

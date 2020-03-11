@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-lg-9 col-md-8 content__area">
                         <div class="row filter-row">
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-4 col-md-4 dropdown-area">
                                 <div class="dropdown__heading">
                                     <p>
                                         <%= (selectedSortOrder) ? 'Sort by ' + selectedSortOrder : 'Default Sorting' %>
@@ -106,10 +106,15 @@
                                 </div>
                             </div>
                         </div>
+                        <% if(selectedCategory){ %>
+                        <div class="selected__category">
+                            <h3 class="text-muted">Showing results in <%= selectedCategory %></h3>
+                        </div>
+                        <% } %>
                         <div class="row">
                             <% if(prods.length > 0) { %>
                             <% for(let product of prods) { %>
-                            <div class="col-md-4 col-lg-4 mb-4">
+                            <div class="col-md-6 col-lg-4 mb-4">
                                 <div class="card product__image__container">
                                     <img class="product__image" src="<%= product.imageUrl %>" alt="">
                                     <div class="product__masking">

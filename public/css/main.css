@@ -97,6 +97,11 @@ main {
   font-size: 2rem;
 }
 
+h5 {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
@@ -190,6 +195,147 @@ main {
   display: table !important;
   height: 125px !important;
 }
+.footer {
+  display: block;
+  width: 100%;
+  padding: 38px 0;
+  background-color: #252525;
+  border-top: 8px solid #47bac1;
+}
+
+
+.footer .footer-link h5 {
+  letter-spacing: 1px;
+  color: #5f5f5f;
+  text-transform: uppercase;
+  margin-bottom: 13px;
+}
+
+.footer .footer-link ul li {
+  color: #acacac;
+  font-size: 12px;
+  line-height: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.footer .footer-link ul li a {
+  color: #acacac;
+  font-size: 12px;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.list-inline li{
+  display: inline-block;
+}
+
+.footer .newsletter h4 {
+  color: #5f5f5f;
+  font-size: 18px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.footer .newsletter {
+  display: block;
+  text-align: center;
+}
+
+.footer .newsletter h3 {
+  color: #acacac;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.footer .newsletter p {
+  color: #acacac;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+footer .newsletter .input-group {
+  display: block;
+  width: 100%;
+}
+.footer .newsletter .input-group .form-control, .footer .newsletter .input-group .input-group-addon {
+  float: left;
+  margin-right: 2%;
+  border-radius: 0;
+  border: 0;
+  background-color: #3b3b3b;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #999;
+}
+
+.footer .newsletter .input-group .input-group-addon {
+  display: inline-block;
+  margin-right: 0;
+  height: 40;
+  padding: 0;
+  text-align: center;
+  line-height: 36px;
+  border: 3px solid #47bac1;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #fff;
+  transition: all .3s ease-in-out;
+}
+
+.footer .newsletter .input-group .input-group-addon:hover,
+.footer .newsletter .input-group .input-group-addon:active{
+  background-color: #47bac1;
+  color: white;
+  text-decoration: none;
+}
+
+.copyRight {
+  display: block;
+  width: 100%;
+  min-height: 53px;
+  background-color: #101010;
+}
+
+.copyRight p {
+  color: #acacac;
+  margin-bottom: 0;
+  font-size: 13px;
+  padding-top: 17px;
+}
+
+.copyRight ul li {
+  line-height: 53px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+@media (max-width: 600px){
+.footer .newsletter {
+    float: none;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    width: 75%;
+}
+.footer .newsletter .input-group .input-group-addon {
+  width: 25%;
+}
+.footer .footer-link {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.copyRight p {
+  text-align: center;
+}
+.copyRight ul {
+  text-align: center;
+}
+}
 
 @media (min-width: 768px) {
   .heading {
@@ -201,4 +347,24 @@ main {
   .partners__logo {
     width: 270px;
   }
+  .footer .newsletter {
+    float: right;
+    margin-bottom: 0;
+    width: 90%;
 }
+.footer .newsletter .input-group .input-group-addon {
+  width: 35%;
+}
+.footer .footer-link{
+  text-align: left;
+  margin-bottom: 0;
+}
+.copyRight p {
+  text-align: left;
+}
+.copyRight ul {
+  text-align: right;
+}
+
+}
+

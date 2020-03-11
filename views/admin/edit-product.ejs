@@ -5,7 +5,7 @@
 
 <body>
     <%- include("../includes/topbar.ejs") %>
-    <%- include("../includes/navigation.ejs") %>
+    <%- include("../includes/navigation.ejs",{csrfToken:csrfToken}) %>
     <main style="padding-top: 1rem;">
         <%- include("../includes/message.ejs") %>
         <section class="py-5">
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form">
                                 <form class="product-form"
-                                    action="/admin/<% if(editing) { %>edit-product<% } else { %>add-product<% } %>?_csrf=<%= csrfToken %>"
+                                    action="/admin/<% if(editing) { %>edit-product<% } else { %>add-product<% } %>"
                                     method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label for="title">Title</label>
@@ -55,7 +55,7 @@
                                             <option value="">Select a category</option>
                                             <% for(let category of categories){ %>
                                             <option value="<%= category._id %>"
-                                                <%= ((editing || hasError) && (product.category.toString() == category._id.toString())) ? 'selected': ''%>>
+                                                <%= ((editing || hasError) && (product.category && (product.category.toString() == category._id.toString()))) ? 'selected': ''%>>
                                                 <%= category.title %></option>
                                             <% } %>
                                         </select>
@@ -73,6 +73,7 @@
                                     <% if(editing) { %>
                                     <input type="hidden" value="<%= product.id %>" name="productId">
                                     <% } %>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
                                     <button class="btn btn-block" type="submit"> <% if (editing) { %> Edit Product
                                         <% } else { %> Add Product

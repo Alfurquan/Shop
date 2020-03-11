@@ -2,24 +2,25 @@ const express = require("express");
 const shopController = require("../controllers/shop");
 const auth = require("../middleware/auth");
 const router = express.Router();
+const csrf = require("csurf");
 
-router.get("/", shopController.getIndex);
+router.get("/", csrf(), shopController.getIndex);
 
-router.get("/products", shopController.getProducts);
+router.get("/products", csrf(), shopController.getProducts);
 
-router.get("/products/:id", shopController.getProduct);
+router.get("/products/:id", csrf(), shopController.getProduct);
 
-router.get("/cart", auth, shopController.getCart);
+router.get("/cart", auth, csrf(), shopController.getCart);
 
-router.post("/cart-delete-item", auth, shopController.postDeleteCart);
+router.post("/cart-delete-item", auth, csrf(), shopController.postDeleteCart);
 
-router.post("/cart", auth, shopController.postCart);
+router.post("/cart", auth, csrf(), shopController.postCart);
 
-router.post("/create-order", auth, shopController.postOrder);
+router.post("/create-order", auth, csrf(), shopController.postOrder);
 
-router.get("/orders", auth, shopController.getOrders);
+router.get("/orders", auth, csrf(), shopController.getOrders);
 
-router.get("/orders/:orderId", auth, shopController.getInvoice)
+router.get("/orders/:orderId", auth, csrf(), shopController.getInvoice);
 
 // router.get("/checkout", shopController.getCheckout);
 

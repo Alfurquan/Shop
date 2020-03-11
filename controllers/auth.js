@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport(
 );
 
 exports.getLogin = (req, res, next) => {
-  console.log("token", req.csrfToken())
+  console.log("token", req.csrfToken());
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -26,6 +26,7 @@ exports.getLogin = (req, res, next) => {
     path: "/login",
     docTitle: "Login",
     errorMessage: message,
+    csrfToken: req.csrfToken(),
     oldInput: { email: "", password: "" },
     validationErrors: []
   });
@@ -41,6 +42,7 @@ exports.getSignup = (req, res, next) => {
   res.render("auth/signup", {
     path: "/signup",
     docTitle: "Sign up",
+    csrfToken: req.csrfToken(),
     errorMessage: message,
     oldInput: { email: "", name: "", password: "", confirmPassword: "" },
     validationErrors: []
@@ -58,6 +60,7 @@ exports.postSignup = async (req, res, next) => {
     return res.status(422).render("auth/signup", {
       path: "/signup",
       docTitle: "Sign up",
+      csrfToken: req.csrfToken(),
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
@@ -94,13 +97,14 @@ exports.postSignup = async (req, res, next) => {
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log("body", req.body)
+  console.log("body", req.body);
   const errors = validationResult(req);
   console.log("errs", errors.array());
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/login", {
       path: "/login",
       docTitle: "Login",
+      csrfToken: req.csrfToken(),
       errorMessage: errors.array()[0].msg,
       oldInput: { email: email, password: password },
       validationErrors: errors.array()
@@ -147,6 +151,7 @@ exports.getReset = (req, res, next) => {
   }
   res.render("auth/reset", {
     path: "/reset",
+    csrfToken: req.csrfToken(),
     docTitle: "Reset password",
     errorMessage: message
   });
@@ -201,6 +206,7 @@ exports.getNewPassword = async (req, res, next) => {
     docTitle: "New Password",
     errorMessage: message,
     passwordToken: token,
+    csrfToken: req.csrfToken(),
     userId: user._id.toString()
   });
 };

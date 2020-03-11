@@ -39,31 +39,29 @@ exports.getProducts = async (req, res, next) => {
 
       products = await Product.find({ category: selectedCategory })
         .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE).sort({ [sortOrder]: 1 });
-    }
-    else if (selectedCategory) {
+        .limit(ITEMS_PER_PAGE)
+        .sort({ [sortOrder]: 1 });
+    } else if (selectedCategory) {
       totalItems = await Product.find({
         category: selectedCategory
       }).countDocuments();
 
       products = await Product.find({ category: selectedCategory })
         .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE);
-    }
-    else if (sortOrder) {
+        .limit(ITEMS_PER_PAGE)
+        .select("-otherImages");
+    } else if (sortOrder) {
       totalItems = await Product.find().countDocuments();
-
       products = await Product.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE).sort({ [sortOrder]: 1 })
-
-    }
-    else {
+        .limit(ITEMS_PER_PAGE)
+        .sort({ [sortOrder]: 1 });
+    } else {
       totalItems = await Product.find().countDocuments();
-
       products = await Product.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE);
+        .limit(ITEMS_PER_PAGE)
+        .select("-otherImages");
     }
 
     // console.log("cond", (category !== '' || sortOrder !== undefined))
@@ -74,6 +72,7 @@ exports.getProducts = async (req, res, next) => {
       currentPage: page,
       categories: categories,
       url: req.originalUrl,
+      csrfToken: req.csrfToken(),
       queryAdded: _.isEmpty(req.query),
       selectedSortOrder: sortOrder,
       isPageSelected: !req.query.page,
@@ -99,6 +98,7 @@ exports.getProduct = (req, res, next) => {
       res.render("shop/product-detail", {
         product: product,
         docTitle: product.title,
+        csrfToken: req.csrfToken(),
         path: "/products"
       });
     })
@@ -128,6 +128,7 @@ exports.getIndex = (req, res, next) => {
         docTitle: "All Products",
         path: "/",
         currentPage: page,
+        csrfToken: req.csrfToken(),
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
         hasPreviousPage: page > 1,
         nextPage: page + 1,
@@ -152,6 +153,7 @@ exports.getCart = (req, res, next) => {
       res.render("shop/cart", {
         path: "/cart",
         docTitle: "Your cart",
+        csrfToken: req.csrfToken(),
         products: products
       });
     })
@@ -232,6 +234,7 @@ exports.getOrders = (req, res, next) => {
       res.render("shop/orders", {
         path: "/orders",
         docTitle: "Your Orders",
+        csrfToken: req.csrfToken(),
         orders: orders
       });
     })
@@ -276,11 +279,11 @@ exports.getInvoice = (req, res, next) => {
           .fontSize(14)
           .text(
             prod.product.title +
-            " - " +
-            prod.quantity +
-            " X " +
-            " RS " +
-            prod.product.price
+              " - " +
+              prod.quantity +
+              " X " +
+              " RS " +
+              prod.product.price
           );
       });
       pdfDoc.text("------------------------------");

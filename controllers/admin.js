@@ -4,17 +4,17 @@ const { validationResult } = require("express-validator");
 const _ = require("lodash");
 const fileHelper = require("../util/file");
 
-
 exports.getAddProduct = async (req, res, next) => {
   const categories = await Category.find().select("title");
   // console.log("cate", categories);
-  console.log("token", req.csrfToken())
+  // console.log("token", req.csrfToken());
 
   res.render("admin/edit-product", {
     docTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
     hasError: false,
+    csrfToken: req.csrfToken(),
     categories: categories,
     errorMessage: null,
     validationErrors: []
@@ -24,21 +24,21 @@ exports.getAddProduct = async (req, res, next) => {
 exports.postAddProduct = async (req, res, next) => {
   const categories = await Category.find().select("title");
   const title = req.body.title;
-  const image = req.files.image[0];
-  const images = req.files.images;
+  console.log("files", req.files.image);
   const price = req.body.price;
   const description = req.body.description;
   const category = req.body.category;
-  console.log("res", req.body);
-  console.log("file", req.files.image[0].path)
+  // console.log("res", req.body);
+  // console.log("file", req.files.image[0].path);
 
-  if (!image) {
+  if (!req.files.image) {
     return res.status(422).render("admin/edit-product", {
       docTitle: "Add Product",
       path: "/admin/add-product",
       editing: false,
       hasError: true,
       categories: categories,
+      csrfToken: req.csrfToken(),
       product: {
         title: title,
         price: price,
@@ -56,26 +56,33 @@ exports.postAddProduct = async (req, res, next) => {
       editing: false,
       hasError: true,
       categories: categories,
+      csrfToken: req.csrfToken(),
       product: { title: title, price: price, description: description },
       errorMessage: "Please select a category",
       validationErrors: []
     });
   }
 
-  if (images.length > 3) {
+  if (!req.files.images) {
     return res.status(422).render("admin/edit-product", {
       docTitle: "Add Product",
       path: "/admin/add-product",
       editing: false,
       hasError: true,
       categories: categories,
+      csrfToken: req.csrfToken(),
       product: {
-        title: title, price: price, description: description, category: category
+        title: title,
+        price: price,
+        description: description,
+        category: category
       },
-      errorMessage: "You can select upto 3 images per product",
+      errorMessage: "Please select atleast one file for other images",
       validationErrors: []
     });
   }
+  const image = req.files.image[0];
+  const images = req.files.images;
   const errors = validationResult(req);
   console.log("error", errors);
   if (!errors.isEmpty()) {
@@ -86,6 +93,7 @@ exports.postAddProduct = async (req, res, next) => {
       editing: false,
       hasError: true,
       categories: categories,
+      csrfToken: req.csrfToken(),
       product: {
         title: title,
         price: price,
@@ -108,8 +116,8 @@ exports.postAddProduct = async (req, res, next) => {
     user: req.user._id
   });
   _.forEach(images, image => {
-    product.otherImages.push(image.path)
-  })
+    product.otherImages.push(image.path);
+  });
 
   product
     .save()
@@ -139,6 +147,7 @@ exports.getEditProduct = async (req, res, next) => {
         path: "/admin/edit-product",
         product: product,
         editing: editMode,
+        csrfToken: req.csrfToken(),
         categories: categories,
         hasError: false,
         errorMessage: null,
@@ -158,7 +167,8 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
   const updatedCategory = req.body.category;
-  const image = req.file;
+  const image = req.files.image[0];
+  const images = req.files.images;
 
   const errors = validationResult(req);
 
@@ -169,6 +179,7 @@ exports.postEditProduct = (req, res, next) => {
       path: "/admin/add-product",
       editing: true,
       hasError: true,
+      csrfToken: req.csrfToken(),
       product: {
         title: updatedTitle,
         price: updatedPrice,
@@ -192,8 +203,17 @@ exports.postEditProduct = (req, res, next) => {
       product.price = updatedPrice;
       product.description = updatedDescription;
       if (image) {
-        fileHelper.deleteFile(product.imageUrl);
-        product.imageUrl = image.path;
+        fileHelper.deleteFile(product.mainImageUrl);
+        product.mainImageUrl = image.path;
+      }
+      if (images.length > 0) {
+        _.each(product.otherImages, img => {
+          fileHelper.deleteFile(img);
+        });
+        product.otherImages = [];
+        _.each(images, img => {
+          product.otherImages.push(img.path);
+        });
       }
       return product.save().then(result => {
         // console.log("Product updated!");
@@ -214,7 +234,10 @@ exports.postDeleteProduct = (req, res, next) => {
       if (!product) {
         return next(new Error("Product not found!"));
       }
-      fileHelper.deleteFile(product.imageUrl);
+      fileHelper.deleteFile(product.mainImageUrl);
+      _.each(product.otherImages, img => {
+        fileHelper.deleteFile(img);
+      });
       return Product.deleteOne({ _id: prodId, user: req.user._id });
     })
     .then(result => {
@@ -233,7 +256,8 @@ exports.getProducts = (req, res, next) => {
       res.render("admin/products", {
         prods: products,
         docTitle: "Admin Products",
-        path: "/admin/products"
+        path: "/admin/products",
+        csrfToken: req.csrfToken()
       });
     })
     .catch(err => {
@@ -248,6 +272,7 @@ exports.getAddCategory = (req, res, next) => {
     docTitle: "Add Categry",
     path: "/admin/add-category",
     editing: false,
+    csrfToken: req.csrfToken(),
     hasError: false,
     errorMessage: null,
     validationErrors: []
@@ -257,13 +282,14 @@ exports.getAddCategory = (req, res, next) => {
 exports.postAddCategory = (req, res, next) => {
   const title = req.body.title;
   const image = req.file;
-
+  console.log("file", req.file);
   if (!image) {
     return res.status(422).render("admin/add-category", {
       docTitle: "Add Category",
       path: "/admin/add-category",
       editing: false,
       hasError: true,
+      csrfToken: req.csrfToken(),
       category: {
         title: title
       },
@@ -280,6 +306,7 @@ exports.postAddCategory = (req, res, next) => {
       path: "/admin/add-category",
       editing: false,
       hasError: true,
+      csrfToken: req.csrfToken(),
       category: {
         title: title
       },

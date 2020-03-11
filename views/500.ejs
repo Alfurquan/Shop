@@ -3,7 +3,7 @@
 
 <body>
     <%- include("includes/topbar.ejs") %>
-    <%- include("includes/navigation.ejs") %>
+    <%- include("includes/navigation.ejs",{csrfToken:csrfToken}) %>
     <h1>Some error occurred!</h1>
     <p>We are working on it, sorry for the incovenience!</p>
 

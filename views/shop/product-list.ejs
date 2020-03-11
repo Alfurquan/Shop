@@ -4,7 +4,7 @@
 
 <body>
     <%- include("../includes/topbar.ejs") %>
-    <%- include("../includes/navigation.ejs") %>
+    <%- include("../includes/navigation.ejs",{csrfToken:csrfToken}) %>
 
     <main>
         <section id="showcase-inner" class="py-5 text-light bg-light">
@@ -116,7 +116,7 @@
                             <% for(let product of prods) { %>
                             <div class="col-md-6 col-lg-4 mb-4">
                                 <div class="card product__image__container">
-                                    <img class="product__image" src="<%= product.imageUrl %>" alt="">
+                                    <img class="product__image" src="<%= product.mainImageUrl %>" alt="">
                                     <div class="product__masking">
                                         <%- include('../includes/add-to-cart.ejs',{product:product}) %>
                                         <ul class="list-inline btn-group" role="group">
@@ -136,17 +136,19 @@
                                 </div>
                             </div>
                             <% } %>
-                            <div class="row page-row">
-                                <div class="col-md-12">
-                                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage,sortOrder:selectedSortOrder,selectedCategory:selectedCategory,url:url,pageSelected:isPageSelected}) %>
-                                </div>
-                            </div>
                             <% } else{ %>
                             <div class="col-md-12">
                                 <h1>No products found!</h1>
                             </div>
                             <% } %>
                         </div>
+                        <% if(prods.length > 0) { %>
+                        <div class="row page-row">
+                            <div class="col-md-12">
+                                <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage,sortOrder:selectedSortOrder,selectedCategory:selectedCategory,url:url,pageSelected:isPageSelected}) %>
+                            </div>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
             </div>

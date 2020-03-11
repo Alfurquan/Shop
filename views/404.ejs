@@ -3,7 +3,7 @@
 
 <body>
     <%- include("includes/topbar.ejs") %>
-    <%- include("includes/navigation.ejs") %>
+    <%- include("includes/navigation.ejs",{csrfToken:csrfToken}) %>
     <h1>Page Not Found!</h1>
 
     <%- include("includes/end.ejs") %>

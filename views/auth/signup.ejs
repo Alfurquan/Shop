@@ -5,7 +5,7 @@
 
 <body>
     <%- include("../includes/topbar.ejs") %>
-    <%- include("../includes/navigation.ejs") %>
+    <%- include("../includes/navigation.ejs",{csrfToken:csrfToken}) %>
     <main style="padding-top: 1rem;">
         <section class="py-5">
             <div class="container">

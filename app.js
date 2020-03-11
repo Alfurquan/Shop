@@ -14,6 +14,7 @@ const mongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const User = require("./models/user");
+// const upload = require("./util/multer");
 
 // const MONGODBURI = "mongodb://localhost/shop";
 const MONGODBURI = "mongodb://alfur:alfur123@ds241278.mlab.com:41278/shop";
@@ -28,38 +29,23 @@ const store = new mongoDBStore({
   collections: "sessions"
 });
 
-
-// const fileStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads/images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
-//   }
-// });
-
-// const fileFilter = (req, file, cb) => {
-//   if (
-//     file.mimetype === "image/png" ||
-//     file.mimetype === "image/jpg" ||
-//     file.mimetype === "image/jpeg"
-//   ) {
-//     cb(null, true);
-//   } else {
-//     cb(null, false);
-//   }
-// };
-
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 // app.use(
-//   multer({
-//     storage: fileStorage,
-//     fileFilter: fileFilter,
-//     limits: { fileSize: 5 * 1024 * 1024 }
-//   }).single("image")
+//   upload.fields([
+//     {
+//       name: "image",
+//       maxCount: 1
+//     },
+//     {
+//       name: "images",
+//       maxCount: 3
+//     }
+//   ])
 // );
+
+// app.use(upload.single("categoryImage"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -73,15 +59,14 @@ app.use(
   })
 );
 
-
-app.use(csrf());
+// app.use(csrf());
 app.use(flash());
 
 app.use((req, res, next) => {
   // console.log("isloggedIn", req.session.isLoggedIn)
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.user = req.session.user;
-  res.locals.csrfToken = req.csrfToken();
+  // res.locals.csrfToken = req.csrfToken();
   next();
 });
 
@@ -106,14 +91,14 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-app.get("/500", errorController.get500);
-app.use("/403", errorController.get403)
-app.use(errorController.get404);
+app.get("/500", csrf(), errorController.get500);
+app.use("/403", csrf(), errorController.get403);
+app.use(csrf(), errorController.get404);
 
 app.use((error, req, res, next) => {
   console.log("500err", error);
   if (error instanceof multer.MulterError) {
-    res.redirect("/admin/add-product")
+    res.status(400).send("Please select upto 3 images");
   }
   res.redirect("/500");
 });

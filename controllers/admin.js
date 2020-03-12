@@ -102,6 +102,8 @@ exports.postAddProduct = async (req, res, next) => {
       validationErrors: errors.array()
     });
   }
+  const image = req.files.image[0];
+  const images = req.files.images;
 
   const mainImageUrl = image.path;
 

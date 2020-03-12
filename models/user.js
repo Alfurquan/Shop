@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         quantity: {
           type: Number,
           required: true
+        },
+        size: {
+          type: String,
         }
       }
     ]
@@ -37,12 +40,21 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.addToCart = function (product) {
-  const cartProductIndex = this.cart.items.findIndex(cp => {
-    return cp.productId.toString() === product._id.toString();
-  });
+userSchema.methods.addToCart = function (product, size) {
+  let cartProductIndex;
+  if (size) {
+    cartProductIndex = this.cart.items.findIndex(cp => {
+      return (cp.productId.toString() === product._id.toString() && cp.size === size);
+    });
+  } else {
+    cartProductIndex = this.cart.items.findIndex(cp => {
+      return cp.productId.toString() === product._id.toString();
+    });
+  }
+
   let newQuantity = 1;
   const updatedCartItems = [...this.cart.items];
+
 
   //Product found in cart just increment its quantity
   if (cartProductIndex >= 0) {
@@ -51,11 +63,21 @@ userSchema.methods.addToCart = function (product) {
   }
   //Product not found in cart
   else {
-    updatedCartItems.push({
-      productId: product._id,
-      quantity: newQuantity
-    });
+    if (size) {
+      updatedCartItems.push({
+        productId: product._id,
+        quantity: newQuantity,
+        size: size
+      });
+    } else {
+      updatedCartItems.push({
+        productId: product._id,
+        quantity: newQuantity
+      });
+    }
+
   }
+
   const updatedCart = {
     items: updatedCartItems
   };
@@ -63,10 +85,14 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function (productId) {
-  const updatedCartItems = this.cart.items.filter(
-    cp => cp.productId.toString() !== productId.toString()
+userSchema.methods.removeFromCart = function (cartItem) {
+  let updatedCartItems;
+
+  updatedCartItems = this.cart.items.filter(
+    cp => cp._id.toString() !== cartItem._id.toString()
   );
+
+  console.log("up", updatedCartItems)
   this.cart.items = updatedCartItems;
   return this.save();
 };

@@ -93,24 +93,25 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
-exports.getProduct = (req, res, next) => {
+exports.getProduct = async (req, res, next) => {
   const prodId = req.params.id;
-  Product.findById(prodId)
-    .then(product => {
-      console.log("prod", product)
-      res.render("shop/product-detail", {
-        product: product,
-        docTitle: product.title,
-        csrfToken: req.csrfToken(),
-        path: "/products"
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  const categories = await Category.find();
+  const product = await Product.findById(prodId);
+  const productCategory = categories.find(c => c._id.toString() === product.category.toString()).title
+  console.log("cat", productCategory)
+  // console.log("prod", product)
+  let showSize = false;
+  if (productCategory === 'Footwear' || productCategory === 'Clothing') {
+    showSize = true
+  }
+  res.render("shop/product-detail", {
+    product: product,
+    docTitle: product.title,
+    showSize: showSize,
+    prodCategory: productCategory,
+    csrfToken: req.csrfToken(),
+    path: "/products"
+  })
 };
 
 exports.getIndex = (req, res, next) => {
@@ -169,9 +170,12 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
+  const size = req.body.size;
+  console.log("pp", prodId);
+  console.log("size", size);
   Product.findById(prodId)
     .then(product => {
-      return req.user.addToCart(product);
+      return req.user.addToCart(product, size);
     })
     .then(result => {
       res.redirect("/cart");
@@ -183,10 +187,19 @@ exports.postCart = (req, res, next) => {
     });
 };
 
-exports.postDeleteCart = (req, res, next) => {
+exports.postDeleteCart = async (req, res, next) => {
   const prodId = req.body.productId;
+  const size = req.body.size;
+  console.log("ss", size)
+  let cartItem;
+  if (size) {
+    cartItem = req.user.cart.items.find(c => c.productId && c.size === size)
+  } else {
+    cartItem = req.user.cart.items.find(c => c.productId)
+  }
+  console.log("cartItem", cartItem)
   req.user
-    .removeFromCart(prodId)
+    .removeFromCart(cartItem)
     .then(result => {
       res.redirect("/cart");
     })

@@ -58,7 +58,38 @@
                             <div class="media-body">
                                 <h2><%= product.title %></h2>
                                 <h3>Rs <%= product.price %></h3>
-                                <p><%= product.description %></p>
+                                <p class="product__desc"><%= product.description %></p>
+                                <%- include("../includes/add-to-cart.ejs",{product:product,showSize:showSize}) %>
+                                <% if (showSize) { %>
+                                <div class="dropdown__heading">
+                                    <p>
+                                        <span class="size-header"> Select Size</span>
+                                        <i class="fa fa-chevron-down"></i>
+                                    </p>
+                                </div>
+                                <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse"
+                                    id="menu">
+                                    <% if(prodCategory === 'Clothing'){ %>
+                                    <ul class="sizes nav navbar-nav side-nav">
+                                        <li>Small</li>
+                                        <li>Medium</li>
+                                        <li>Large</li>
+                                        <li>X Large</li>
+                                    </ul>
+                                    <% } else { %>
+                                    <ul class="sizes nav navbar-nav side-nav">
+                                        <li>UK 6</li>
+                                        <li>UK 7</li>
+                                        <li>UK 8</li>
+                                        <li>UK 9</li>
+                                        <li>UK 10</li>
+                                        <li>UK 11</li>
+                                        <li>UK 12</li>
+                                    </ul>
+                                    <% } %>
+                                </div>
+                                <% } %>
+                                <button id="add-to-cart">Add to cart</button>
                             </div>
                         </div>
                     </div>

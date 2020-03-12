@@ -1,4 +1,7 @@
 <form id="form" action="/cart" method="POST">
   <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <% if(showSize){ %>
+  <input type="hidden" name="size" id="size">
+  <% } %>
   <input type="hidden" name="productId" value="<%= product.id %>" />
 </form>

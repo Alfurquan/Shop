@@ -32,6 +32,7 @@
             </div>
         </section>
 
+
         <section id="products" class="py-4">
             <div class="container">
                 <div class="row">
@@ -118,14 +119,9 @@
                                 <div class="card product__image__container">
                                     <img class="product__image" src="<%= product.mainImageUrl %>" alt="">
                                     <div class="product__masking">
-                                        <%- include('../includes/add-to-cart.ejs',{product:product}) %>
                                         <ul class="list-inline btn-group" role="group">
                                             <li>
                                                 <a href="/products/<%=product._id %>"><i class="fa fa-eye"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:{document.getElementById('form').submit()}"><i
-                                                        class="fa fa-shopping-cart"></i></a>
                                             </li>
                                         </ul>
                                     </div>

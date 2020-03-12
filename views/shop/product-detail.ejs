@@ -22,6 +22,7 @@
 
         <section class="main-content">
             <div class="container">
+                <%- include("../includes/message.ejs") %>
                 <div class="row single-product">
                     <div class="col-md-12">
                         <div class="media flex-wrap">
@@ -59,7 +60,6 @@
                                 <h2><%= product.title %></h2>
                                 <h3>Rs <%= product.price %></h3>
                                 <p class="product__desc"><%= product.description %></p>
-                                <%- include("../includes/add-to-cart.ejs",{product:product,showSize:showSize}) %>
                                 <% if (showSize) { %>
                                 <div class="dropdown__heading">
                                     <p>
@@ -89,7 +89,7 @@
                                     <% } %>
                                 </div>
                                 <% } %>
-                                <button id="add-to-cart">Add to cart</button>
+                                <%- include("../includes/add-to-cart.ejs",{product:product,showSize:showSize}) %>
                             </div>
                         </div>
                     </div>

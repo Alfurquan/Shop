@@ -1,34 +1,22 @@
-$(document).ready(function () {
+$(document).ready(function() {
   $(".alert")
     .fadeTo(2000, 500)
-    .slideUp(500, function () {
+    .slideUp(500, function() {
       $(".alert").slideUp(500);
     });
 
-  $(".dropdown__heading").click(function () {
+  $(".dropdown__heading").click(function() {
     $("#menu").slideToggle();
   });
 
-  $('.sizes li').click(function () {
-    let size = $(this).text()
-    $('.size-header').text(size)
-    $('#size').val(size);
-    $('#menu').slideUp()
-  })
+  $(".sizes li").click(function() {
+    let size = $(this).text();
+    $(".size-header").text(size);
+    $("#size").val(size);
+    $("#menu").slideUp();
+  });
 
-  $('#add-to-cart').click(function () {
-    if ($('.size-header').length) {
-      let val = $('#size').val();
-      console.log("entered")
-      console.log("val", val)
-      if (val == undefined) {
-        console.log("undefined")
-      }
-    }
-    // $('#form').submit()
-  })
-
-  $("#images").change(function () {
+  $("#images").change(function() {
     var files = $(this)[0].files;
     if (files.length > 3) {
       // alert("You can select max 3 images.");

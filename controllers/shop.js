@@ -97,21 +97,32 @@ exports.getProduct = async (req, res, next) => {
   const prodId = req.params.id;
   const categories = await Category.find();
   const product = await Product.findById(prodId);
-  const productCategory = categories.find(c => c._id.toString() === product.category.toString()).title
-  console.log("cat", productCategory)
+  const productCategory = categories.find(
+    c => c._id.toString() === product.category.toString()
+  ).title;
+  // console.log("cat", productCategory);
   // console.log("prod", product)
+
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+
   let showSize = false;
-  if (productCategory === 'Footwear' || productCategory === 'Clothing') {
-    showSize = true
+  if (productCategory === "Footwear" || productCategory === "Clothing") {
+    showSize = true;
   }
   res.render("shop/product-detail", {
     product: product,
     docTitle: product.title,
     showSize: showSize,
+    errorMessage: message,
     prodCategory: productCategory,
     csrfToken: req.csrfToken(),
     path: "/products"
-  })
+  });
 };
 
 exports.getIndex = (req, res, next) => {
@@ -171,8 +182,17 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   const size = req.body.size;
+  const isSize = req.body.isSize;
   console.log("pp", prodId);
   console.log("size", size);
+  console.log("isSize", isSize);
+  if (isSize) {
+    if (size === "") {
+      req.flash("error", "Please select a size!");
+      return res.redirect(req.get("referer"));
+    }
+  }
+
   Product.findById(prodId)
     .then(product => {
       return req.user.addToCart(product, size);
@@ -190,14 +210,18 @@ exports.postCart = (req, res, next) => {
 exports.postDeleteCart = async (req, res, next) => {
   const prodId = req.body.productId;
   const size = req.body.size;
-  console.log("ss", size)
+  console.log("ss", size);
   let cartItem;
   if (size) {
-    cartItem = req.user.cart.items.find(c => c.productId && c.size === size)
+    cartItem = req.user.cart.items.find(
+      c => c.productId.toString() === prodId.toString() && c.size === size
+    );
   } else {
-    cartItem = req.user.cart.items.find(c => c.productId)
+    cartItem = req.user.cart.items.find(
+      c => c.productId.toString() === prodId.toString()
+    );
   }
-  console.log("cartItem", cartItem)
+  console.log("cartItem", cartItem);
   req.user
     .removeFromCart(cartItem)
     .then(result => {
@@ -295,11 +319,11 @@ exports.getInvoice = (req, res, next) => {
           .fontSize(14)
           .text(
             prod.product.title +
-            " - " +
-            prod.quantity +
-            " X " +
-            " RS " +
-            prod.product.price
+              " - " +
+              prod.quantity +
+              " X " +
+              " RS " +
+              prod.product.price
           );
       });
       pdfDoc.text("------------------------------");

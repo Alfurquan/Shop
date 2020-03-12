@@ -40,6 +40,7 @@ exports.getProducts = async (req, res, next) => {
       products = await Product.find({ category: selectedCategory })
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
+        .select("-otherImages")
         .sort({ [sortOrder]: 1 });
     } else if (selectedCategory) {
       totalItems = await Product.find({
@@ -55,6 +56,7 @@ exports.getProducts = async (req, res, next) => {
       products = await Product.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
+        .select("-otherImages")
         .sort({ [sortOrder]: 1 });
     } else {
       totalItems = await Product.find().countDocuments();
@@ -95,6 +97,7 @@ exports.getProduct = (req, res, next) => {
   const prodId = req.params.id;
   Product.findById(prodId)
     .then(product => {
+      console.log("prod", product)
       res.render("shop/product-detail", {
         product: product,
         docTitle: product.title,
@@ -279,11 +282,11 @@ exports.getInvoice = (req, res, next) => {
           .fontSize(14)
           .text(
             prod.product.title +
-              " - " +
-              prod.quantity +
-              " X " +
-              " RS " +
-              prod.product.price
+            " - " +
+            prod.quantity +
+            " X " +
+            " RS " +
+            prod.product.price
           );
       });
       pdfDoc.text("------------------------------");

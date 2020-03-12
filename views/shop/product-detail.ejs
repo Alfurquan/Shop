@@ -1,18 +1,70 @@
 <%- include("../includes/head.ejs") %>
+<link rel="stylesheet" href="/css/product.css">
 </head>
 
 <body>
     <%- include("../includes/navigation.ejs",{csrfToken:csrfToken}) %>
-    <main class="centered">
-        <h1><%= product.title %></h1>
-        <hr>
-        <div>
-            <img src="/<%= product.imageUrl %>" alt="<%= product.title %>">
-        </div>
-        <h2><%= product.price %></h2>
-        <p><%= product.description %></p>
-        <% if (isAuthenticated){ %>
-        <%- include("../includes/add-to-cart" , {product:product}) %>
-        <% } %>
+    <main>
+
+        <section id="bc" class="mt-3">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">
+                                <i class="fa fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active"> Single Product</li>
+                    </ol>
+                </nav>
+            </div>
+        </section>
+
+        <section class="main-content">
+            <div class="container">
+                <div class="row single-product">
+                    <div class="col-md-12">
+                        <div class="media flex-wrap">
+                            <div class="media-left product-slider">
+                                <div id="carousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active" data-thumb="0">
+                                            <img src="/<%= product.mainImageUrl %>" alt="<%= product.title %>">
+                                        </div>
+                                        <% let i = 1 
+                                        for(let img of product.otherImages){ %>
+                                        <div class="carousel-item " data-thumb="<%= i %>">
+                                            <img src="/<%= img %>" alt="<%= product.title %>">
+                                        </div>
+                                        <% i++ } %>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <div id="thumbcarousel" class="carousel slide" data-interval="false">
+                                        <div class="carousel-inner">
+                                            <div data-target="#carousel" data-slide-to="0" class="thumb">
+                                                <img src="/<%= product.mainImageUrl %>" alt="<%= product.title %>">
+                                            </div>
+                                            <% i = 1
+                                            for(let img of product.otherImages){ %>
+                                            <div data-target="#carousel" class="thumb " data-slide-to="<%= i %>">
+                                                <img src="/<%= img %>" alt="<%= product.title %>">
+                                            </div>
+                                            <% i++ } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h2><%= product.title %></h2>
+                                <h3>Rs <%= product.price %></h3>
+                                <p><%= product.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include("../includes/footer.ejs") %>
     </main>
     <%- include("../includes/end.ejs") %>

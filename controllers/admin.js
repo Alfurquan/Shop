@@ -81,8 +81,6 @@ exports.postAddProduct = async (req, res, next) => {
       validationErrors: []
     });
   }
-  const image = req.files.image[0];
-  const images = req.files.images;
   const errors = validationResult(req);
   console.log("error", errors);
   if (!errors.isEmpty()) {
@@ -167,8 +165,8 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
   const updatedCategory = req.body.category;
-  const image = req.files.image[0];
-  const images = req.files.images;
+  // const image = req.files.image[0];
+  // const images = req.files.images;
 
   const errors = validationResult(req);
 
@@ -202,11 +200,13 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDescription;
-      if (image) {
+      if (req.files.image) {
+        const image = req.files.image[0];
         fileHelper.deleteFile(product.mainImageUrl);
         product.mainImageUrl = image.path;
       }
-      if (images.length > 0) {
+      if (req.files.images) {
+        const images = req.files.images;
         _.each(product.otherImages, img => {
           fileHelper.deleteFile(img);
         });

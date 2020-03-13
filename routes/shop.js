@@ -14,6 +14,8 @@ router.get("/cart", auth, csrf(), shopController.getCart);
 
 router.post("/cart-delete-item", auth, csrf(), shopController.postDeleteCart);
 
+router.post("/remove-from-cart", auth, csrf(), shopController.removeFromCart)
+
 router.post("/cart", auth, csrf(), shopController.postCart);
 
 router.post("/create-order", auth, csrf(), shopController.postOrder);

@@ -1,0 +1,11 @@
+<form id="decform" action="/remove-from-cart" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <% if(showSize){ %>
+    <input type="hidden" name="size" id="size" value="<%= prodSize ? prodSize : ''%>" />
+    <% } %>
+    <input type="hidden" name="isSize" id="isSize" value="<%= showSize %>" />
+    <input type="hidden" name="productId" value="<%= product.id %>" />
+    <% if(showBtn){ %>
+    <button class="btn" type="submit">Add to cart</button>
+    <% } %>
+</form>

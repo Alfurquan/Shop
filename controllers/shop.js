@@ -165,11 +165,13 @@ exports.getCart = (req, res, next) => {
     .execPopulate()
     .then(user => {
       const products = user.cart.items;
+      const totalAmount = user.cart.totalAmount
       res.render("shop/cart", {
         path: "/cart",
         docTitle: "Your cart",
         csrfToken: req.csrfToken(),
-        products: products
+        products: products,
+        totalAmount: totalAmount
       });
     })
     .catch(err => {
@@ -206,6 +208,35 @@ exports.postCart = (req, res, next) => {
       return next(error);
     });
 };
+
+exports.removeFromCart = (req, res, next) => {
+  const prodId = req.body.productId;
+  const size = req.body.size;
+  const isSize = req.body.isSize;
+  console.log("pp", prodId);
+  console.log("size", size);
+  console.log("isSize", isSize);
+  if (isSize) {
+    if (size === "") {
+      req.flash("error", "Please select a size!");
+      return res.redirect(req.get("referer"));
+    }
+  }
+
+  Product.findById(prodId)
+    .then(product => {
+      return req.user.removeItemFromCart(product, size);
+    })
+    .then(result => {
+      res.redirect("/cart");
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+
+}
 
 exports.postDeleteCart = async (req, res, next) => {
   const prodId = req.body.productId;
@@ -319,11 +350,11 @@ exports.getInvoice = (req, res, next) => {
           .fontSize(14)
           .text(
             prod.product.title +
-              " - " +
-              prod.quantity +
-              " X " +
-              " RS " +
-              prod.product.price
+            " - " +
+            prod.quantity +
+            " X " +
+            " RS " +
+            prod.product.price
           );
       });
       pdfDoc.text("------------------------------");

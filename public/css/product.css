@@ -149,6 +149,7 @@
   width: 180px;
   border: 0.4px solid rgba(0, 0, 0, 0.2);
   padding: 5px 10px;
+  background-color: #fff;
 }
 
 .dropdown__heading .fa {
@@ -218,6 +219,34 @@
 
 .single-product .media .media-body .product__desc {
   margin-top: 37px;
+}
+
+.single-product .media .media-body #menu li{
+  color: #797979;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.single-product .media .media-body #menu ul li:hover{
+  color: rgb(71, 186, 193) ;
+}
+
+.single-product .media-body  .dropdown{
+  height: 100px;
+  margin-top: 40px;
+}
+
+.single-product .media .media-body form button{
+  background-color: rgb(71, 186, 193);
+  padding: 1rem 1.5rem;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 0.5px solid rgb(71, 186, 193) ;
+}
+
+.single-product .media .media-body form{
+  display: block;
 }
 
 @media (min-width: 768px) {

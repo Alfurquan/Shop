@@ -1,37 +1,115 @@
 <%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+<link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/cart.css">
 </head>
 
 <body>
     <%- include('../includes/navigation.ejs',{csrfToken:csrfToken}) %>
     <main>
-        <% if (products.length > 0) { %>
-        <ul class="cart__item-list">
-            <% products.forEach(p => { %>
-            <li class="cart__item">
-                <h1><%= p.productId.title %></h1>
-                <h2>Quantity: <%= p.quantity %></h2>
-                <form action="/cart-delete-item" method="POST">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                    <input type="hidden" value="<%= p.productId._id %>" name="productId">
-                    <% if(p.size){ %>
-                    <input type="hidden" value="<%= p.size %>" name="size">
-                    <% } %>
-                    <button class="btn danger" type="submit">Delete</button>
-                </form>
-            </li>
-            <% }) %>
-        </ul>
-        <hr>
-        <div class="centered">
-            <form action="/create-order" method="POST">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <button type="submit" class="btn">Order Now!</button>
-            </form>
-        </div>
 
-        <% } else { %>
-        <h1>No Products in Cart!</h1>
-        <% } %>
+        <section id="bc" class="mt-3">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">
+                                <i class="fa fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Cart</li>
+                    </ol>
+                </nav>
+            </div>
+        </section>
+
+        <section class="main-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cartListInner">
+                            <% if (products.length > 0) { %>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Sub Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% products.forEach(p => { %>
+                                        <tr>
+                                            <td>
+                                                <form action="/cart-delete-item" method="POST">
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                                    <input type="hidden" value="<%= p.productId._id %>"
+                                                        name="productId">
+                                                    <% if(p.size){ %>
+                                                    <input type="hidden" value="<%= p.size %>" name="size">
+                                                    <% } %>
+                                                    <button type="submit" class="close"><span>×</span></button>
+                                                </form>
+                                                <span class="cartImage">
+                                                    <img src="/<%= p.productId.mainImageUrl %>" alt="">
+                                                </span>
+                                            </td>
+                                            <td><%= p.productId.title %>
+                                                <% if(p.size) { %>
+                                                (<%= p.size %>)
+                                                <% } %>
+                                            </td>
+                                            <td>Rs <%= p.productId.price %></td>
+                                            <td class="count-input">
+                                                <%- include("../includes/add-to-cart.ejs",{product:p.productId,showSize:p.size ? true:false ,prodSize:p.size,showBtn:false}) %>
+                                                <%- include("../includes/remove-from-cart.ejs",{product:p.productId,showSize:p.size ? true:false ,prodSize:p.size,showBtn:false}) %>
+                                                <a class="incr-btn dcr-cart" data-action="decrease"><i
+                                                        class="fa fa-minus"></i></a>
+                                                <input class="quantity" type="text" value="<%= p.quantity %>">
+                                                <a class="incr-btn incr-cart" data-action="increase"><i
+                                                        class="fa fa-plus"></i></a>
+                                            </td>
+                                            <td>Rs <%=p.subTotal %></td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row totalAmountArea">
+                                <div class="col-sm-4 ml-sm-auto">
+                                    <ul class="list-unstyled">
+                                        <li>Sub Total :
+                                            <span>
+                                                Rs <%= totalAmount %>
+                                            </span>
+                                        </li>
+                                        <li>Delivery Fees :
+                                            <span>
+                                                Rs 50
+                                            </span>
+                                        </li>
+                                        <li>Total Amount :
+                                            <span class="grandTotal">
+                                                Rs <%= parseInt(totalAmount) + 50 %>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="checkBtnArea">
+                                <a href="checkout-step-1.html" class="btn btn-primary btn-default">checkout<i
+                                        class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+                            </div>
+                            <% } else{ %>
+                            <p>No Products in cart!</p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('../includes/footer.ejs') %>
     </main>
     <%- include('../includes/end.ejs') %>

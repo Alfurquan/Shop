@@ -74,6 +74,10 @@ main {
   padding: 0px;
 }
 
+#bc nav{
+  box-shadow: none;
+}
+
 #showcase-inner {
   padding-top: 5rem !important;
   background: url(../images/shopping.jpeg) no-repeat top center fixed;
